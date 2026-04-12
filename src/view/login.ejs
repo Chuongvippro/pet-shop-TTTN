@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Đăng nhập</title>
+  <link rel="stylesheet" href="/css/home.css">
+</head>
+
+<body>
+
+  <div class="container" style="margin-top: 100px; max-width: 400px;">
+    <h2 style="text-align:center; margin-bottom:20px;">Đăng nhập</h2>
+
+    <!-- 🔥 message -->
+    <p id="message" style="text-align:center;"></p>
+
+    <form id="loginForm">
+      <div style="margin-bottom:15px;">
+        <label>Email</label>
+        <input type="text" id="email" name="email" required style="width:100%; padding:10px;">
+      </div>
+
+      <div style="margin-bottom:15px;">
+        <label>Mật khẩu</label>
+        <input type="password" id="password" name="password" required style="width:100%; padding:10px;">
+      </div>
+
+      <button type="submit" style="
+        width:100%;
+        padding:10px;
+        background:#ff6b81;
+        color:white;
+        border:none;
+        border-radius:5px;
+      ">
+        Đăng nhập
+      </button>
+
+      <a href="/user/signIn" style="
+        display: block;
+        text-align: center;
+        margin-top: 10px;
+        color: blue;
+      ">Đăng ký</a>
+    </form>
+
+    <!-- 🔥 nút khôi phục -->
+    <button id="restoreBtn" style="
+      display:none;
+      margin-top:10px;
+      width:100%;
+      padding:10px;
+    ">
+      Khôi phục tài khoản
+    </button>
+  </div>
+
+  <script>
+    const form = document.getElementById("loginForm");
+    const message = document.getElementById("message");
+    const restoreBtn = document.getElementById("restoreBtn");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      try {
+        const response = await fetch("/user/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+
+        if (data.status === "deleted") {
+          message.style.color = "red";
+          message.textContent = data.message;
+
+          restoreBtn.style.display = "block";
+          restoreBtn.dataset.email = email;
+          restoreBtn.dataset.password = password;
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error(data.message);
+        }
+
+        localStorage.setItem("accessToken", data.data.accessToken);
+        localStorage.setItem("refreshToken", data.data.refreshToken);
+        localStorage.setItem("user", JSON.stringify(data.data.user));
+
+
+        message.style.color = "green";
+        message.textContent = "Đăng nhập thành công!";
+
+        // 👉 redirect sau 1s
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 1000);
+
+      } catch (err) {
+        message.style.color = "red";
+        message.textContent = err.message;
+      }
+    });
+
+    // 🔥 restore account
+    restoreBtn.addEventListener("click", async () => {
+      const email = restoreBtn.dataset.email;
+      const password = restoreBtn.dataset.password;
+
+      const res = await fetch("/auth/restore", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        message.style.color = "green";
+        message.textContent = "Khôi phục thành công! Đăng nhập lại.";
+        restoreBtn.style.display = "none";
+      } else {
+        message.style.color = "red";
+        message.textContent = data.message;
+      }
+    });
+  </script>
+
+</body>
+
+</html>

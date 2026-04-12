@@ -1,0 +1,223 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* LAYOUT */
+.admin-wrapper {
+  display: flex;
+  height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 240px;
+  background: #111827;
+  color: white;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* TITLE */
+.sidebar h2 {
+  margin-bottom: 20px;
+}
+
+/* MENU BUTTON CHUNG */
+.menu-btn {
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  background: #1f2937;
+  color: white;
+  text-align: left;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  transition: 0.2s;
+}
+
+.menu-btn:hover {
+  background: #374151;
+}
+
+/* ACTIVE */
+.menu-btn.active {
+  background: #2563eb;
+}
+
+/* TRANG CHỦ (xanh) */
+.home-btn {
+  background: #3b82f6;
+}
+
+.home-btn:hover {
+  background: #2563eb;
+}
+
+/* LOGOUT (đỏ, nằm dưới cùng) */
+.logout {
+  margin-top: auto;
+  background: #dc2626;
+}
+
+.logout:hover {
+  background: #b91c1c;
+}
+
+/* CONTENT */
+.content {
+  flex: 1;
+  padding: 20px;
+  background: #f3f4f6;
+}
+
+#content-box {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* TABLE */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table th,
+.table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.table th {
+  background: #222;
+  color: white;
+}
+
+.table tr:hover {
+  background: #f5f5f5;
+}
+
+/* HEADER TABLE */
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+/* BUTTONS */
+.btn-add {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-add:hover {
+  background: #218838;
+}
+
+.btn-edit {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin-right: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-edit:hover {
+  background: #0056b3;
+}
+
+.btn-delete {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-delete:hover {
+  background: #c82333;
+}
+
+/* MODAL */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background: #fff;
+  width: 360px;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.modal-content input:focus {
+  border-color: #2563eb;
+}
+
+.modal-content button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.modal-content button:first-of-type {
+  background: #2563eb;
+  color: white;
+}
+
+.modal-content button:last-of-type {
+  background: #e5e7eb;
+}
+
+/* MESSAGE */
+.form-message {
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.form-message.success {
+  color: #16a34a;
+}
+
+.form-message.error {
+  color: #dc2626;
+}

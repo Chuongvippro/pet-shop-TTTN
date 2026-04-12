@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+
+<body>
+
+  <div class="admin-wrapper">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <h2>ADMIN</h2>
+
+      <button class="menu-btn active" onclick="loadSection('dashboard')">
+        Dashboard
+      </button>
+
+      <button class="menu-btn" onclick="loadSection('products', event)">
+        Sản phẩm
+      </button>
+
+      <button class="menu-btn" onclick="loadSection('users', event)">
+        Người dùng
+      </button>
+
+      <button class="menu-btn home-btn" onclick="goHome()">
+        Trang chủ
+      </button>
+      <button class="menu-btn logout" onclick="logout()">
+        Đăng xuất
+      </button>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+      <div id="content-box">
+        <h2>Xin chào Admin 👑</h2>
+        <p>Chọn chức năng bên trái</p>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div id="product-modal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Thêm sản phẩm</h2>
+
+      <input id="name" placeholder="Tên sản phẩm" />
+      <input id="price" placeholder="Giá" />
+      <input id="stock" placeholder="Số lượng" />
+      <input id="description" placeholder="Mô tả" />
+      <select id="category"></select>
+
+      <!--nhận thông báo từ be-->
+      <div id="form-message" class="form-message"></div>
+
+      <button onclick="submitProduct()">Lưu</button>
+      <button onclick="closeModal()">Hủy</button>
+    </div>
+  </div>
+
+
+  <div id="user-modal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Thêm người dùng</h2>
+
+      <input id="user_name" placeholder="Tên người dùng" />
+      <input id="email" placeholder="Email" />
+      <input id="password" placeholder="Mật khẩu" />
+      <input id="phone" placeholder="Số điện thoại" />
+      <div id="role-group">
+        <select id="role">
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+
+      <!-- thông báo -->
+      <div id="user-form-message" class="form-message"></div>
+
+      <button onclick="submitUser()">Lưu</button>
+      <button onclick="closeUserModal()">Hủy</button>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/admin.js"></script>
+  <script src="/js/admin.api.js"></script>
+
+</body>
+
+</html>
