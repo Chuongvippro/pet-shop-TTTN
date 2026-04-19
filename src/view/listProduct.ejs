@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thú Cưng Shop</title>
+    <link rel="stylesheet" href="/css/home.css">
+    <style>
+        .product-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            padding: 20px;
+        }
+
+        .product-card {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>Thú Cưng Shop</h1>
+            <nav>
+                <ul>
+                    <li><a href="/">Trang Chủ</a></li>
+                    <li class="dropdown">
+                        <a href="#">Sản Phẩm</a>
+                        <ul class="dropdown-menu" id="categoryMenu"></ul>
+                    </li>
+                    <li><a href="#">Giới Thiệu</a></li>
+                    <li><a href="#">Liên Hệ</a></li>
+                    <% if (user) { %>
+
+
+                        <% if (user.role==='admin' ) { %>
+                            <li><a href="/admin">Quản trị</a></li>
+                            <% } %>
+
+                                <li><a href="/user/profile">Thông tin cá nhân</a></li>
+                                <li><a href="#" onclick="logout()">Đăng xuất</a></li>
+
+                                <% } else { %>
+                                    <li><a href="/user/login" class="login-btn">Đăng nhập</a></li>
+                                    <% } %>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+
+    <main>
+        <div class="product-container" id="productContainer"></div>
+
+        <div class="pagination" id="pagination"></div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Thú Cưng Shop. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+    <script src="/js/api.js"></script>
+    <script src="/js/home.js"></script>
+    <script src="/js/product.api.js"></script>
+
+
+</body>
+
+</html>

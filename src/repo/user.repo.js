@@ -21,9 +21,20 @@ class userRepo {
     return rows.length > 0 ? rows[0] : null;
   }
 
-  async getAll() {
-    const [rows] = await this.connection.query(`SELECT * FROM users`);
-    return rows;
+  async getAll(page = 1, size = 10) {
+    const offset = (page - 1) * size;
+
+    const [rows] = await this.connection.query(
+      `SELECT * FROM users ORDER BY id LIMIT ? OFFSET ?`,
+      [size, offset],
+    );
+    return rows
+  }
+  async countAll() {
+    const [rows] = await this.connection.query(
+      `SELECT COUNT(*) as total FROM users`,
+    );
+    return rows[0].total;
   }
 
   async createUser(data) {
@@ -80,6 +91,15 @@ class userRepo {
     }
 
     return result;
+  }
+
+  async findUserById(id) {
+    const [rows] = await this.connection.query(
+      `
+      select * from users where id = ?`,
+      [id],
+    );
+    return rows[0] || null;
   }
 }
 

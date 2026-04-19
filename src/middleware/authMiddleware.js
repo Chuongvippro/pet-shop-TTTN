@@ -45,4 +45,5 @@ function isAdmin(req, res, next) {
   next();
 }
 
+
 module.exports = { authMiddleware, checkUserLogin, isAdmin };

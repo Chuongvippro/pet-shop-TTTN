@@ -3,8 +3,17 @@ class productService {
     this.productRepo = productRepo;
   }
 
-  async getAll() {
-    return await this.productRepo.getAll();
+  async getAll(page = 1, size = 10) {
+    const data = await this.productRepo.getAll(page, size);
+    const totalItems = await this.productRepo.countAll();
+    const totalPages = Math.ceil(totalItems / size);
+
+    return {
+      data, // Mảng sản phẩm
+      currentPage: page,
+      totalPages,
+      totalItems,
+    };
   }
 
   async getAllcategories() {
@@ -12,7 +21,7 @@ class productService {
   }
 
   async createProduct(data) {
-    const { name, price, stock, description, category_id } = data;
+    const { name, price, stock, description, category_id, img } = data;
 
     if (!name || !price || !category_id || !stock || !description) {
       throw new Error("Vui lòng nhập đầy đủ thông tin");
@@ -40,6 +49,7 @@ class productService {
       description: description ? description.trim() : "",
       category_id: Number(category_id),
       status: "active",
+      img: img || null,
     };
     const result = await this.productRepo.createProduct(newProduct);
 
@@ -60,7 +70,7 @@ class productService {
   }
 
   async updateProduct(data) {
-    const { id, name, price, stock, description, category_id } = data;
+    const { id, name, price, stock, description, category_id, img } = data;
     if (!id) {
       throw new Error("Thiếu id sản phẩm");
     }
@@ -75,6 +85,9 @@ class productService {
 
     //check loại sản phẩm
     const isExist = await this.productRepo.checkCategory(category_id);
+    //kiểm tra có ảnh chưa
+    const oldImg = await this.productRepo.getUrlImg(id);
+    const finalImg = img ? img : oldImg;
 
     if (!isExist) {
       throw new Error("Loại sản phẩm không tồn tại");
@@ -87,6 +100,7 @@ class productService {
       description: description ? description.trim() : "",
       category_id: Number(category_id),
       status: "active",
+      img: finalImg,
     };
     const result = await this.productRepo.updateProduct(id, updateProduct);
 
@@ -96,6 +110,50 @@ class productService {
         id: result.insertId,
         ...updateProduct,
       },
+    };
+  }
+
+  async getListProduct(params) {
+    let { categoryId, keyword, sort, page = 1, limit = 10 } = params;
+
+    //chuẩn hóa dữ liệu
+    if (!page || page < 1) page = 1;
+    if (!limit || limit > 50) limit = 10;
+
+    keyword = keyword?.trim();
+
+    const products = await this.productRepo.getListProduct({
+      categoryId,
+      keyword,
+      sort,
+      page,
+      limit,
+    });
+
+    const totalItems = await this.productRepo.countAllForUser({
+      categoryId,
+      keyword,
+    });
+
+    const totalPages = Math.ceil(totalItems / limit);
+
+    return {
+      products,
+      currentPage: page,
+      totalPages,
+      totalItems,
+    };
+  }
+
+  async getSearchProduct(keyword) {
+    if (!keyword) {
+      return { products: [] };
+    }
+
+    const products = await this.productRepo.searchProduct(keyword);
+
+    return {
+      products,
     };
   }
 }

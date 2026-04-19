@@ -1,16 +1,27 @@
 async function createProduct(data) {
   try {
+    const formData = new FormData();
+
+    formData.append("name", data.name);
+    formData.append("price", data.price);
+    formData.append("stock", data.stock);
+    formData.append("category_id", data.category_id);
+    formData.append("description", data.description);
+
+    if (data.file) {
+      formData.append("img", data.file);
+    }
+
     const res = await fetch("/admin/create/product", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
+      body: formData,
     });
 
     const text = await res.text();
 
     let result;
+
+    //call back tránh lỗi
     try {
       result = JSON.parse(text);
     } catch {
@@ -18,13 +29,13 @@ async function createProduct(data) {
     }
 
     if (!res.ok) {
-      throw new Error(result.message || "Tạo sản phẩm thất bại");
+      throw new Error(result.message || "Cập nhậ thất bại");
     }
 
     return result;
   } catch (err) {
-    console.error("Lỗi create:", err.message);
-    throw err;
+    console.error("Lỗi cập nhật:", err.message);
+    alert(err.message);
   }
 }
 async function deleteProduct(id) {
@@ -59,10 +70,22 @@ async function deleteProduct(id) {
 
 async function updateProduct(data) {
   try {
+    const formData = new FormData();
+
+    formData.append("id", data.id);
+    formData.append("name", data.name);
+    formData.append("price", data.price);
+    formData.append("stock", data.stock);
+    formData.append("category_id", data.category_id);
+    formData.append("description", data.description);
+
+    if (data.file) {
+      formData.append("img", data.file);
+    }
+
     const res = await fetch("/admin/update/product", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: formData,
     });
 
     const text = await res.text();
@@ -86,7 +109,6 @@ async function updateProduct(data) {
     alert(err.message);
   }
 }
-
 
 //user
 async function createUser(data) {

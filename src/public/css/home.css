@@ -33,7 +33,8 @@ header nav ul {
   list-style: none;
   display: flex;
   justify-content: center;
-  gap: 30px;
+  gap: 15px;
+  flex-wrap: nowrap;
 }
 
 header nav ul li a {
@@ -141,4 +142,150 @@ footer {
 
 .login-btn:hover {
   background-color: #ffe0e6;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  min-width: 180px;
+  list-style: none;
+  padding: 10px 0;
+  margin: 0;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+  z-index: 1000;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu li {
+  padding: 10px 20px;
+  color: #333;             
+  cursor: pointer;         
+  transition: background-color 0.2s; 
+}
+
+.dropdown-menu li a {
+  color: #333;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-menu li:hover {
+  background-color: #f5f5f5;
+}
+
+
+/* ===== WRAPPER ===== */
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ===== INPUT ===== */
+#searchInput {
+  width: 200px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  outline: none;
+  transition: 0.2s;
+}
+
+#searchInput:focus {
+  border-color: #ff6b81;
+  box-shadow: 0 0 0 2px rgba(255, 107, 129, 0.2);
+}
+
+/* ===== BUTTON ===== */
+.search-wrapper button {
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  font-weight: bold;
+  color: #ff6b81;
+  transition: 0.2s;
+}
+
+.search-wrapper button:hover {
+  background: #ff6b81;
+  color: white;
+  border-color: #ff6b81;
+}
+
+/* css search */
+#searchResult {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 280px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  display: none;
+  z-index: 9999;
+  max-height: 320px;
+  overflow-y: auto;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+/* ===== ITEM ===== */
+.search-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+/* hover rõ + nổi */
+.search-item:hover {
+  background: #fff1f3;
+  transform: translateX(2px);
+}
+
+/* ===== IMAGE ===== */
+.search-item img {
+  width: 38px;
+  height: 38px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+/* ===== TEXT ===== */
+.search-item span {
+  font-size: 14px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== SCROLL BAR (đẹp hơn) ===== */
+#searchResult::-webkit-scrollbar {
+  width: 6px;
+}
+
+#searchResult::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 10px;
+}
+
+#searchResult::-webkit-scrollbar-thumb:hover {
+  background: #bbb;
 }

@@ -91,8 +91,17 @@ class userService {
     return await this.refreshRepo.delete(refreshToken);
   }
 
-  async getAll() {
-    return await this.userRepo.getAll();
+  async getAll(page = 1, size = 10) {
+    const data = await this.userRepo.getAll(page, size);
+    const totalItems = await this.userRepo.countAll();
+    const totalPages = Math.ceil(totalItems / size);
+
+    return {
+      data, // Mảng sản phẩm
+      currentPage: page,
+      totalPages,
+      totalItems,
+    };
   }
 
   async createUser(data) {
@@ -155,7 +164,7 @@ class userService {
     if (!user_name || !email) {
       throw new Error("Thiếu thông tin");
     }
-    
+
     const existing = await this.userRepo.findByEmail(email);
 
     if (existing && existing.id !== id) {
@@ -186,6 +195,13 @@ class userService {
         ...updatedData,
       },
     };
+  }
+
+  async getProfile(id) {
+    const user = await this.userRepo.findUserById(id);
+
+    if (!user) throw new Error("USER_NOT_FOUND");
+    return user;
   }
 }
 

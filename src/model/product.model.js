@@ -9,6 +9,7 @@ class ProductModel {
     status,
     created_at,
     updated_at,
+    img,
   }) {
     this.id = id;
     this.name = name;
@@ -23,6 +24,7 @@ class ProductModel {
 
     this.created_at = created_at || new Date();
     this.updated_at = updated_at || new Date();
+    this.img = img || null;
   }
 
   // check còn hàng không
@@ -47,7 +49,6 @@ class ProductModel {
   increaseStock(quantity = 1) {
     this.stock += quantity;
   }
-
 
   toPublic() {
     return {

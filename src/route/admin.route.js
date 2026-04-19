@@ -5,6 +5,8 @@ const {
   checkUserLogin,
   isAdmin,
 } = require("../middleware/authMiddleware");
+const upload = require("../middleware/upload");
+
 
 const connection = require("../config/db");
 const productRepo = require("../repo/product.repo");
@@ -28,9 +30,9 @@ adminRoute.get("/", checkUserLogin, (req, res) => {
 adminRoute.get("/products", product_Controller.getAllProduct);
 adminRoute.get("/users", user_Controller.getAllAccount);
 adminRoute.get("/categories", product_Controller.getAllcategories);
-adminRoute.post("/create/product", product_Controller.createProduct);
+adminRoute.post("/create/product",upload.single("img"), product_Controller.createProduct);
 adminRoute.post("/delete/product", product_Controller.deleteProduct);
-adminRoute.post("/update/product", product_Controller.updateProduct);
+adminRoute.post("/update/product",upload.single("img"), product_Controller.updateProduct);
 adminRoute.post(
   "/create/user",
   authMiddleware,

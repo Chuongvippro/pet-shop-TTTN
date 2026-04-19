@@ -25,14 +25,12 @@ class authService {
     }
 
     const newAccessToken = generateAccessToken(payload);
-    const newRefreshToken = generateRefreshToken(payload);
+   
 
-    await this.refreshRepo.delete(refreshToken);
-    await this.refreshRepo.save(payload.id, newRefreshToken);
 
     return {
       accessToken: newAccessToken,
-      refreshToken: newRefreshToken,
+      refreshToken: refreshToken,
     };
   }
 }

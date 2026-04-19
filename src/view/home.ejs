@@ -14,8 +14,16 @@
       <h1>Thú Cưng Shop</h1>
       <nav>
         <ul>
+          <li style="position: relative;">
+            <input type="text" id="searchInput" placeholder="Tìm sản phẩm..." />
+            <button onclick="handleSearch()">Search</button>
+            <div id="searchResult" class="search-result"></div>
+          </li>
           <li><a href="#">Trang Chủ</a></li>
-          <li><a href="#">Sản Phẩm</a></li>
+          <li class="dropdown">
+            <a href="#">Sản Phẩm</a>
+            <ul class="dropdown-menu" id="categoryMenu"></ul>
+          </li>
           <li><a href="#">Giới Thiệu</a></li>
           <li><a href="#">Liên Hệ</a></li>
           <% if (user) { %>
@@ -25,7 +33,7 @@
               <li><a href="/admin">Quản trị</a></li>
               <% } %>
 
-                <li><a href="/profile">Xin chào, <%= user.username || user.email %></a></li>
+                <li><a href="/user/profile">Thông tin cá nhân</a></li>
                 <li><a href="#" onclick="logout()">Đăng xuất</a></li>
 
                 <% } else { %>
@@ -36,33 +44,26 @@
     </div>
   </header>
 
-  <section class="hero">
-    <div class="container">
-      <h2>Chào mừng, <%= name %>!</h2>
-      <p>Tìm những người bạn lông xù tuyệt vời cho gia đình bạn!</p>
-      <a href="#" class="btn">Xem Sản Phẩm</a>
-    </div>
-  </section>
+
 
   <section class="products">
     <div class="container">
       <h2>Sản Phẩm Nổi Bật</h2>
       <div class="product-list">
-        <div class="product-card">
+        <a href="/products?category=food" class="product-card">
           <img src="https://place-puppy.com/200x200" alt="Chó">
-          <h3>Chó con dễ thương</h3>
-          <p>Giá: 2.000.000₫</p>
-        </div>
-        <div class="product-card">
+          <h3>Thức ăn</h3>
+        </a>
+
+        <a href="/products?category=cleaning" class="product-card">
           <img src="https://placekitten.com/200/200" alt="Mèo">
-          <h3>Mèo con xinh xắn</h3>
-          <p>Giá: 1.500.000₫</p>
-        </div>
-        <div class="product-card">
+          <h3>Dụng cụ vệ sinh</h3>
+        </a>
+
+        <a href="/products?category=accessory" class="product-card">
           <img src="https://place-puppy.com/201x201" alt="Thú cưng khác">
-          <h3>Bồ câu hiền lành</h3>
-          <p>Giá: 500.000₫</p>
-        </div>
+          <h3>Phụ kiện</h3>
+        </a>
       </div>
     </div>
   </section>

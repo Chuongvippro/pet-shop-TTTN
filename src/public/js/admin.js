@@ -1,14 +1,18 @@
-async function loadSection(type, event) {
+let currentPage = 1;
+const pageSize = 10;
+async function loadSection(type, event, page = 1) {
   const box = document.getElementById("content-box");
+  currentPage = page;
   try {
-    const res = await fetch(`/admin/${type}`);
-
+    const res = await fetch(`/admin/${type}?page=${page}`);
     if (!res.ok) {
       throw new Error("Module không tồn tại");
     }
     const data = await res.json();
 
     if (type === "products") {
+      const products = data.data;
+      const totalPages = data.totalPages;
       let html = `
       <div class="table-header">
         <h2>Danh sách sản phẩm</h2>
@@ -25,13 +29,14 @@ async function loadSection(type, event) {
             <th>Giá</th>
             <th>Số lượng</th>
             <th>Trạng thái</th>
+            <th>Ảnh</th>
             <th>Hành động</th>
           </tr>
         </thead>
         <tbody>
     `;
 
-      data.forEach((p) => {
+      products.forEach((p) => {
         html += `
         <tr>
           <td>${p.id}</td>
@@ -39,6 +44,9 @@ async function loadSection(type, event) {
           <td>${p.price}</td>
           <td>${p.stock ?? 0}</td>
           <td>${p.status}</td>
+          <td>
+            <img src="/${p.img}" style="width:60px; height:60px; object-fit:cover;" />
+          </td>
           <td>
             <button class="btn-edit" onclick='openAddProduct(${JSON.stringify(p)})'>
               Sửa
@@ -54,12 +62,26 @@ async function loadSection(type, event) {
       html += `
         </tbody>
       </table>
-    `;
+      `;
+
+      html += `<div class="pagination" style="margin-top: 20px; text-align: center;">`;
+      for (let i = 1; i <= totalPages; i++) {
+        html += `
+          <button 
+            style="margin: 0 5px; padding: 5px 10px; ${i === currentPage ? "background: #007bff; color: white;" : ""}"
+            onclick="loadSection('${type}', null, ${i})"
+          >
+            ${i}
+          </button>`;
+      }
+      html += `</div>`;
 
       box.innerHTML = html;
     }
 
     if (type === "users") {
+      const user = data.data;
+      const totalPages = data.totalPages;
       let html = `
     <div class="table-header">
       <h2>Danh sách người dùng</h2>
@@ -81,7 +103,7 @@ async function loadSection(type, event) {
       <tbody>
   `;
 
-      data.forEach((u) => {
+      user.forEach((u) => {
         html += `
       <tr>
         <td>${u.id}</td>
@@ -107,6 +129,17 @@ async function loadSection(type, event) {
       </tbody>
     </table>
   `;
+      html += `<div class="pagination" style="margin-top: 20px; text-align: center;">`;
+      for (let i = 1; i <= totalPages; i++) {
+        html += `
+          <button 
+            style="margin: 0 5px; padding: 5px 10px; ${i === currentPage ? "background: #007bff; color: white;" : ""}"
+            onclick="loadSection('${type}', null, ${i})"
+          >
+            ${i}
+          </button>`;
+      }
+      html += `</div>`;
 
       box.innerHTML = html;
     }
@@ -123,15 +156,18 @@ async function openAddProduct(product = null) {
   document.getElementById("product-modal").classList.add("show");
   const title = document.querySelector("#product-modal h2");
 
-  //lấy tất cả loại sản phẩm
   const res = await fetch("/admin/categories");
   const categories = await res.json();
   const select = document.getElementById("category");
-  let html = `<option value="">-- Chọn loại --</option>`;
 
+  let html = `<option value="">-- Chọn loại --</option>`;
   categories.forEach((c) => {
     html += `<option value="${c.id}">${c.name}</option>`;
   });
+  select.innerHTML = html;
+
+  const preview = document.getElementById("preview-img");
+  const imgInput = document.getElementById("img");
 
   if (product) {
     editProductId = product.id;
@@ -142,6 +178,12 @@ async function openAddProduct(product = null) {
     document.getElementById("stock").value = product.stock;
     document.getElementById("description").value = product.description;
     document.getElementById("category").value = product.category_id;
+
+    //hiển thị ảnh
+    if (product.img) {
+      preview.src = "/" + product.img;
+      preview.style.display = "block";
+    }
   } else {
     title.innerText = "Thêm sản phẩm";
 
@@ -149,11 +191,24 @@ async function openAddProduct(product = null) {
     document.getElementById("price").value = "";
     document.getElementById("stock").value = "";
     document.getElementById("category").value = "";
+    document.getElementById("description").value = "";
+
+    preview.src = "";
+    preview.style.display = "none";
 
     editProductId = null;
   }
-  select.innerHTML = html;
+
+  // hiển thị ảnh vừa upload
+  imgInput.onchange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = "block";
+    }
+  };
 }
+
 function closeModal() {
   document.getElementById("product-modal").classList.remove("show");
 }
@@ -165,6 +220,7 @@ async function submitProduct() {
   const category_id = document.getElementById("category").value;
   const description = document.getElementById("description").value;
   const messageBox = document.getElementById("form-message");
+  const file = document.getElementById("img").files[0];
 
   try {
     let res;
@@ -176,6 +232,7 @@ async function submitProduct() {
         stock,
         description,
         category_id,
+        file,
       });
     } else {
       res = await createProduct({
@@ -184,6 +241,7 @@ async function submitProduct() {
         stock,
         description,
         category_id,
+        file,
       });
     }
     messageBox.innerText = res.message;
@@ -227,7 +285,6 @@ async function openAddUser(user = null) {
 }
 function checkRoleUI() {
   const user = JSON.parse(localStorage.getItem("user") || "null");
-
 
   const roleGroup = document.getElementById("role-group");
 

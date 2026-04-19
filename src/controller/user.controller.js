@@ -6,6 +6,7 @@ class userController {
     this.loginUser = this.loginUser.bind(this);
     this.logOut = this.logOut.bind(this);
     this.getAllAccount = this.getAllAccount.bind(this);
+    this.getProfile = this.getProfile.bind(this);
 
     this.createUser = this.createUser.bind(this);
     this.updateUser = this.updateUser.bind(this);
@@ -88,7 +89,10 @@ class userController {
 
   async getAllAccount(req, res) {
     try {
-      const users = await this.userService.getAll();
+      const page = parseInt(req.query.page) || 1;
+      const size = parseInt(req.query.size) || 10;
+
+      const users = await this.userService.getAll(page, size);
       return res.json(users);
     } catch (err) {
       return res.status(500).json({ message: err.message });
@@ -135,6 +139,21 @@ class userController {
       });
     }
   }
-}
 
+  async getProfile(req, res) {
+    try {
+      if (!req.user) return res.status(401).json({ message: "Chưa đăng nhập" });
+
+      const user = await this.userService.getProfile(req.user.id);
+      return res.json(user);
+    } catch (err) {
+      if (err.message === "USER_NOT_FOUND") {
+        return res.status(404).json({ message: "Không tìm thấy user" });
+      }
+
+      console.log(err);
+      return res.status(500).json({ message: "Lỗi lấy thông tin cá nhân" });
+    }
+  }
+}
 module.exports = userController;

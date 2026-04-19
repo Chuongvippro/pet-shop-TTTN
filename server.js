@@ -22,6 +22,9 @@ app.use("/user", userRoute);
 app.use("/admin", adminRoute);
 app.use("/auth", authRoute);
 
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 app.listen(8084, () => {
   console.log(`Server running at http://localhost:${process.env.PORT} `);
 });

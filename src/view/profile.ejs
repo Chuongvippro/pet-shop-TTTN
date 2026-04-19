@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile</title>
+
+    <link rel="stylesheet" href="/css/profile.css">
+
+</head>
+
+<body>
+
+    <div class="card">
+
+        <div class="header"></div>
+
+        <img class="avatar" src="<%= user.avatar || 'https://i.pravatar.cc/150' %>" />
+
+        <div class="content">
+            <h2>
+                <%= user.username %>
+            </h2>
+            <div class="role">
+                <%= user.role %>
+            </div>
+
+            <div class="info">
+                <div class="row">
+                    <span class="label">Email</span>
+                    <span>
+                        <%= user.email %>
+                    </span>
+                </div>
+
+                <div class="row">
+                    <span class="label">SĐT</span>
+                    <span>
+                        <%= user.phone || "Chưa có" %>
+                    </span>
+                </div>
+
+                <div class="row">
+                    <span class="label">ID</span>
+                    <span>
+                        <%= user.id %>
+                    </span>
+                </div>
+            </div>
+
+            <button class="btn" onclick="location.href='/'">Về trang chủ</button>
+        </div>
+
+    </div>
+
+    <script src="/js/profile.js"></script>
+
+</body>
+
+</html>

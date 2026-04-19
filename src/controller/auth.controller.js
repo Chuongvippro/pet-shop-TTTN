@@ -20,6 +20,10 @@ class authController {
         httpOnly: true,
         maxAge: 5 * 60 * 1000,
       });
+      res.cookie("refreshToken", result.refreshToken, {
+        httpOnly: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 ngày
+      });
 
       return res.json({ message: "Refresh thành công" });
     } catch (err) {
